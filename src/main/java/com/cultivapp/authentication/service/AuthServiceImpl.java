@@ -34,7 +34,6 @@ public class AuthServiceImpl implements AuthService{
             throw new EmailAlreadyExistsException("Email is already registered");
         } else {
             var user = User.builder()
-                    .username(request.getUsername())
                     .firstName(request.getFirstName())
                     .lastName(request.getLastName())
                     .phoneNumber(request.getPhoneNumber())
@@ -44,7 +43,7 @@ public class AuthServiceImpl implements AuthService{
                     .build();
             userRepository.save(user);
             var jwtToken = jwtService.generateToken(user);
-            return AuthResponse.builder().token(jwtToken).username(user.getUserName()).email(user.getEmail()).rol(user.getRole().name()).build();
+            return AuthResponse.builder().token(jwtToken).firstName(user.getFirstName()).email(user.getEmail()).rol(user.getRole().name()).build();
         }
     }
 
@@ -60,7 +59,7 @@ public class AuthServiceImpl implements AuthService{
             );
             User user = userOptional.get();
             var jwtToken = jwtService.generateToken(user);
-            return AuthResponse.builder().token(jwtToken).username(user.getUserName()).email(user.getEmail()).rol(user.getRole().name()).build();
+            return AuthResponse.builder().token(jwtToken).firstName(user.getFirstName()).email(user.getEmail()).rol(user.getRole().name()).build();
         } else {
             throw new EmailNotFoundException("The email isn't registered");
         }

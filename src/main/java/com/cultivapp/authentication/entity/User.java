@@ -25,8 +25,6 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "Username can't be empty!")
-    private String username;
     @NotBlank(message = "FirstName can't be empty!")
     private String firstName;
     @NotBlank(message = "LastName can't be empty!")
@@ -56,10 +54,6 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return email;
-    }
-
-    public String getUserName() {
-        return username;
     }
 
     @Override

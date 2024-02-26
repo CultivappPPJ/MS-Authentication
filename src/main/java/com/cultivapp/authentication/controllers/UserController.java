@@ -13,7 +13,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v01/auth")
+//TODO: pasar a variable de entorno
+@CrossOrigin("http://localhost:5173/")
 public class UserController {
 
     @Autowired
@@ -35,9 +37,16 @@ public class UserController {
             AuthResponse response = authService.authenticate(request);
             return ResponseEntity.ok(response);
         } catch (EmailNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(AuthResponse.builder().error(e.getMessage()).build());
-        }catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(AuthResponse.builder().error("Credenciales inválidas").build());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    AuthResponse.builder()
+                            .error(e.getMessage())
+                            .build());
+        }
+        catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    AuthResponse.builder()
+                            .error("Credentials are incorrect.")
+                            .build());
         }
     }
 

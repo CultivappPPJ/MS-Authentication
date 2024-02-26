@@ -13,11 +13,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableMethodSecurity
+@CrossOrigin("http://localhost:5173/")
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
@@ -36,9 +38,7 @@ public class SecurityConfig {
 
     private RequestMatcher publicEndPoints(){
         return new OrRequestMatcher(
-                new AntPathRequestMatcher("/api/auth/**"),
-                new AntPathRequestMatcher("/api/advertisements"),
-                new AntPathRequestMatcher("/api/advertisements/{id}")
+                new AntPathRequestMatcher("/api/auth/**")
         );
     }
 }

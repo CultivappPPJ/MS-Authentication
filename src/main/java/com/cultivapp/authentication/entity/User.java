@@ -25,20 +25,20 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "Username no puede estar vacio!")
+    @NotBlank(message = "Username can't be empty!")
     private String username;
-    @NotBlank(message = "FirstName no puede estar vacio!")
+    @NotBlank(message = "FirstName can't be empty!")
     private String firstName;
-    @NotBlank(message = "LastName no puede estar vacio!")
+    @NotBlank(message = "LastName can't be empty!")
     private String lastName;
-    @NotBlank(message = "PhoneNumber no puede estar vacio!")
+    @NotBlank(message = "PhoneNumber can't be empty!")
     private String phoneNumber;
     @Column(unique = true)
-    @NotBlank(message = "Email no puede estar vacio!")
-    @Email(message = "El email no es valido!")
+    @NotBlank(message = "Email can't be empty!")
+    @Email(message = "El email isn't valid!")
     private String email;
-    @NotBlank(message = "Por favor, ingresa un password")
-    @Size(min = 4, message = "El password debe contener al menos 4 caracteres")
+    @NotBlank(message = "Please enter a password")
+    @Size(min = 4, message = "Password must contain at least 4 characters")
     private String password;
     @Enumerated(EnumType.ORDINAL)
     private Role role;

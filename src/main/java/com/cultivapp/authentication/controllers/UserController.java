@@ -37,7 +37,7 @@ public class UserController {
         } catch (EmailNotFoundException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(AuthResponse.builder().error(e.getMessage()).build());
         }catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(AuthResponse.builder().error("Credenciales inválidas").build());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(AuthResponse.builder().error("Wrong credentials").build());
         }
     }
 

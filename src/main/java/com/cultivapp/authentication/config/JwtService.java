@@ -36,11 +36,11 @@ public class JwtService {
     }
 
     public <T> T getClaim(String token, Function<Claims, T> claimsResolver){
-        final Claims claims = getAllClains(token);
+        final Claims claims = getAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    private Claims getAllClains(String token) {
+    private Claims getAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignInKey())

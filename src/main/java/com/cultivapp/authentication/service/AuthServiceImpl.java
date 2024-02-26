@@ -31,7 +31,7 @@ public class AuthServiceImpl implements AuthService{
     public AuthResponse register(RegisterRequest request) {
         Optional<User> existUser = userRepository.findUserByEmail(request.getEmail());
         if (existUser.isPresent()) {
-            throw new EmailAlreadyExistsException("El correo electrónico ya está registrado");
+            throw new EmailAlreadyExistsException("Email is already registered");
         } else {
             var user = User.builder()
                     .username(request.getUsername())
@@ -62,7 +62,7 @@ public class AuthServiceImpl implements AuthService{
             var jwtToken = jwtService.generateToken(user);
             return AuthResponse.builder().token(jwtToken).username(user.getUserName()).email(user.getEmail()).rol(user.getRole().name()).build();
         } else {
-            throw new EmailNotFoundException("El correo electrónico no está registrado");
+            throw new EmailNotFoundException("The email isn't registered");
         }
     }
 }

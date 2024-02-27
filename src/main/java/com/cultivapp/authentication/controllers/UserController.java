@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v01/auth")
-//TODO: pasar a variable de entorno
 @CrossOrigin("http://localhost:5173/")
 public class UserController {
 
@@ -22,7 +21,12 @@ public class UserController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request){
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
+        if (request == null || nullFields(request)) {
+            // Returns a ResponseEntity with status code BAD_REQUEST if fields are null
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(AuthResponse.builder().error("Null fields").build());
+        }
         try {
             AuthResponse response = authService.register(request);
             return ResponseEntity.ok(response);
@@ -33,6 +37,11 @@ public class UserController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthResponse> authenticate(@RequestBody AuthenticationRequest request){
+        if (request == null || nullFields(request)) {
+            // Returns a ResponseEntity with status code BAD_REQUEST if fields are null
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(AuthResponse.builder().error("Null fields").build());
+        }
         try {
             AuthResponse response = authService.authenticate(request);
             return ResponseEntity.ok(response);
@@ -50,4 +59,17 @@ public class UserController {
         }
     }
 
+    // Method that verifies if there are null fields in input
+    private boolean nullFields(RegisterRequest request) {
+        return request.getFirstName() == null ||
+                request.getLastName() == null ||
+                request.getPhoneNumber() == null ||
+                request.getEmail() == null ||
+                request.getPassword() == null;
+    }
+
+    private boolean nullFields(AuthenticationRequest request) {
+        return  request.getEmail() == null ||
+                request.getPassword() == null;
+    }
 }

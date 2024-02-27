@@ -136,4 +136,24 @@ public class UserControllerTest {
         // Verificar que el servicio no fue llamado
         verify(authServiceMock, never()).register(request);
     }
+
+
+
+    @Test
+    public void testNullFieldsInAuthenticationRequest() {
+        // Create an AuthenticationRequest with null fields
+        AuthenticationRequest request = new AuthenticationRequest(null, "contrasena");
+
+        // Call the controller method
+        ResponseEntity<AuthResponse> responseEntity = userController.authenticate(request);
+
+        // Verify that the response is BAD_REQUEST
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+
+        // Verify that the error message is "Null fields"
+        assertEquals("Null fields", responseEntity.getBody().getError());
+
+        // Verify that the authService.authenticate was not called
+        verify(authServiceMock, never()).authenticate(request);
+    }
 }

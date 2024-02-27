@@ -119,16 +119,9 @@ class AuthServiceImplTest {
 
     @Test
     void testAuthenticate_EmailNotFoundException() {
-        // Configurar datos de prueba para AuthenticationRequest
         AuthenticationRequest request = new AuthenticationRequest("mdiaz@gmail.com", "password");
-
-        // Configurar el comportamiento simulado del repositorio
         when(userRepository.findUserByEmail(request.getEmail())).thenReturn(Optional.empty());
-
-        // Verificar que se lanza la excepción esperada
         assertThrows(EmailNotFoundException.class, () -> authService.authenticate(request));
-
-        // Verificar que authenticationManager.authenticate no se llamó
         verify(authenticationManager, never()).authenticate(any());
     }
 

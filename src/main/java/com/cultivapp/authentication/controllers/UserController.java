@@ -6,8 +6,8 @@ import com.cultivapp.authentication.dto.RegisterRequest;
 import com.cultivapp.authentication.exceptions.EmailAlreadyExistsException;
 import com.cultivapp.authentication.exceptions.EmailNotFoundException;
 import com.cultivapp.authentication.service.AuthService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
 @CrossOrigin("http://localhost:5173/")
 public class UserController {
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {

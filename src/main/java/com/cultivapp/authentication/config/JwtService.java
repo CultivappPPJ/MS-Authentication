@@ -16,6 +16,7 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
+    //TODO: Pasar a variable de entorno
     private static final String SECRET_KEY ="dad6d5e1415185e725d60db88a967a3dff04fcdf88d9740be6ebf18ccc228501";
 
     public String generateToken(UserDetails userDetails){

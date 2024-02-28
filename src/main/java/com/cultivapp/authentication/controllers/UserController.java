@@ -6,6 +6,7 @@ import com.cultivapp.authentication.dto.RegisterRequest;
 import com.cultivapp.authentication.exceptions.EmailAlreadyExistsException;
 import com.cultivapp.authentication.exceptions.EmailNotFoundException;
 import com.cultivapp.authentication.service.AuthService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v01/auth")
+@Slf4j
+@RequestMapping("/api/v1/auth")
 @CrossOrigin("http://localhost:5173/")
 public class UserController {
 
@@ -22,13 +24,13 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
-        if (request == null || nullFields(request)) {
-            // Returns a ResponseEntity with status code BAD_REQUEST if fields are null
+        if (nullFields(request)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(AuthResponse.builder().error("Null fields").build());
         }
         try {
             AuthResponse response = authService.register(request);
+            log.info("Register response OK{}", response);
             return ResponseEntity.ok(response);
         } catch (EmailAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(AuthResponse.builder().error(e.getMessage()).build());
@@ -37,8 +39,7 @@ public class UserController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthResponse> authenticate(@RequestBody AuthenticationRequest request){
-        if (request == null || nullFields(request)) {
-            // Returns a ResponseEntity with status code BAD_REQUEST if fields are null
+        if (nullFields(request)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(AuthResponse.builder().error("Null fields").build());
         }
@@ -59,7 +60,6 @@ public class UserController {
         }
     }
 
-    // Method that verifies if there are null fields in input
     private boolean nullFields(RegisterRequest request) {
         return request.getFirstName() == null ||
                 request.getLastName() == null ||

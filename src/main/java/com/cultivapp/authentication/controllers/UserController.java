@@ -63,7 +63,6 @@ public class UserController {
     private boolean nullFields(RegisterRequest request) {
         return request.getFirstName() == null ||
                 request.getLastName() == null ||
-                request.getPhoneNumber() == null ||
                 request.getEmail() == null ||
                 request.getPassword() == null;
     }

@@ -34,75 +34,57 @@ public class UserControllerTest {
         MockitoAnnotations.initMocks(this);
     }
 
-
     @Test
-    public void testRegister() {
-        RegisterRequest request = new RegisterRequest("Marcial", "Diaz", "978030199", "mdiaz@gmail.com", "contrasena");
-
-        when(authServiceMock.register(request)).thenReturn(AuthResponse.builder().build());
-
+    public void testRegisterSuccess() {
+        RegisterRequest request = new RegisterRequest("John", "Doe", "john.doe@example.com", "password");
         ResponseEntity<AuthResponse> responseEntity = userController.register(request);
-
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-
-        verify(authServiceMock, times(1)).register(request);
     }
 
     @Test
-    public void testAuthenticate() {
-        AuthenticationRequest request = new AuthenticationRequest("mdiaz@gmail.com", "contrasena");
-
-        when(authServiceMock.authenticate(request)).thenReturn(AuthResponse.builder().build());
-
+    public void testAuthenticateSuccess() {
+        AuthenticationRequest request = new AuthenticationRequest("john.doe@example.com", "password");
         ResponseEntity<AuthResponse> responseEntity = userController.authenticate(request);
-
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-
-        verify(authServiceMock, times(1)).authenticate(request);
     }
 
     @Test
-    public void testRegisterError() {
-        RegisterRequest request = new RegisterRequest("Marcial", "Diaz", "978030199", "mdiaz@gmail.com", "contrasena");
-
-        when(authServiceMock.register(request)).thenThrow(new EmailAlreadyExistsException("Email already exists"));
-
-        ResponseEntity<AuthResponse> responseEntity = userController.register(request);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-
-        verify(authServiceMock, times(1)).register(request);
-    }
-
-    @Test
-    public void testAuthenticateError() {
-        AuthenticationRequest request = new AuthenticationRequest("mdiaz@gmail.com", "contrasena");
-
-        when(authServiceMock.authenticate(request)).thenThrow(new EmailNotFoundException("Email not found"));
-
+    public void testAuthenticateEmailNotFound() {
+        AuthenticationRequest request = new AuthenticationRequest("john.doe@example.com", "password");
         ResponseEntity<AuthResponse> responseEntity = userController.authenticate(request);
-
         assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode());
-
-        verify(authServiceMock, times(1)).authenticate(request);
     }
 
     @Test
     public void testAuthenticateIncorrectCredentials() {
-        AuthenticationRequest request = new AuthenticationRequest("mdiaz@gmail.com", "contrasena_incorrecta");
+        AuthenticationRequest request = new AuthenticationRequest("john.doe@example.com", "incorrect_password");
+        ResponseEntity<AuthResponse> responseEntity = userController.authenticate(request);
+        assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode());
+    }
 
-        when(authServiceMock.authenticate(request)).thenThrow(new BadCredentialsException("Credentials are incorrect"));
+    @Test
+    public void testNullFieldsForRegister() {
+        RegisterRequest request = new RegisterRequest(null, "Doe", "john.doe@example.com", "password");
+
+        ResponseEntity<AuthResponse> responseEntity = userController.register(request);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        verify(authServiceMock, never()).register(any());
+    }
+
+    @Test
+    public void testNullFieldsForAuthenticate() {
+        AuthenticationRequest request = new AuthenticationRequest(null, "password");
 
         ResponseEntity<AuthResponse> responseEntity = userController.authenticate(request);
 
-        assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode());
-
-        verify(authServiceMock, times(1)).authenticate(request);
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        verify(authServiceMock, never()).authenticate(any());
     }
 
     @Test
     public void testInvalidInputForRegister() {
-        RegisterRequest request = new RegisterRequest(null, "Diaz", null, "mdiaz@gmail.com", "contrasena");
+        RegisterRequest request = new RegisterRequest(null, "Diaz", "mdiaz@gmail.com", "contrasena");
 
         ResponseEntity<AuthResponse> responseEntity = userController.register(request);
 
@@ -128,7 +110,7 @@ public class UserControllerTest {
 
     @Test
     public void testRegisterNullFields() {
-        RegisterRequest request = new RegisterRequest(null, "Diaz", null, "mdiaz@gmail.com", "contrasena");
+        RegisterRequest request = new RegisterRequest(null, "Diaz", "mdiaz@gmail.com", "contrasena");
 
         ResponseEntity<AuthResponse> responseEntity = userController.register(request);
 

@@ -13,7 +13,6 @@ public class UserTest {
         User user = User.builder()
                 .firstName("Marcial")
                 .lastName("Diaz")
-                .phoneNumber("978030199")
                 .email("mdiaz@gmail.com")
                 .password("password123")
                 .role(Role.USER)
@@ -22,7 +21,6 @@ public class UserTest {
         assertNotNull(user);
         assertEquals("Marcial", user.getFirstName());
         assertEquals("Diaz", user.getLastName());
-        assertEquals("978030199", user.getPhoneNumber());
         assertEquals("mdiaz@gmail.com", user.getEmail());
         assertEquals("password123", user.getPassword());
         assertEquals(Role.USER, user.getRole());
@@ -33,7 +31,6 @@ public class UserTest {
         User user = User.builder()
                 .firstName("Marcial")
                 .lastName("Diaz")
-                .phoneNumber("978030199")
                 .email("mdiaz@gmail.com")
                 .password("password123")
                 .role(Role.USER)
@@ -51,7 +48,6 @@ public class UserTest {
         User user = User.builder()
                 .firstName("Marcial")
                 .lastName("Diaz")
-                .phoneNumber("978030199")
                 .email("mdiaz@gmail.com")
                 .password("password123")
                 .role(Role.USER)
@@ -67,12 +63,11 @@ public class UserTest {
 
     @Test
     public void testConstructorWithId() {
-        User user = new User(1L, "Marcial", "Diaz", "978030199", "marcial.diaz@gmail.com", "password", Role.USER);
+        User user = new User(1L, "Marcial", "Diaz", "marcial.diaz@gmail.com", "password", Role.USER);
 
         assertEquals(1L, user.getId());
         assertEquals("Marcial", user.getFirstName());
         assertEquals("Diaz", user.getLastName());
-        assertEquals("978030199", user.getPhoneNumber());
         assertEquals("marcial.diaz@gmail.com", user.getUsername());
         assertEquals("password", user.getPassword());
     }

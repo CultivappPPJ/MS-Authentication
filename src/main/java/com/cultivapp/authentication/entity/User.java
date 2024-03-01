@@ -29,8 +29,6 @@ public class User implements UserDetails {
     private String firstName;
     @NotBlank(message = "LastName cannot be empty!")
     private String lastName;
-    @NotBlank(message = "PhoneNumber cannot be empty!")
-    private String phoneNumber;
     @Column(unique = true)
     @NotBlank(message = "Email cannot be empty!")
     @Email(message = "The email is not valid!")

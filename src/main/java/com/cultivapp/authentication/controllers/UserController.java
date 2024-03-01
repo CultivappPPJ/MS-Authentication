@@ -55,7 +55,7 @@ public class UserController {
         catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                     AuthResponse.builder()
-                            .error("Credentials are incorrect.")
+                            .error("Credenciales incorrectas.")
                             .build());
         }
     }
@@ -63,7 +63,6 @@ public class UserController {
     private boolean nullFields(RegisterRequest request) {
         return request.getFirstName() == null ||
                 request.getLastName() == null ||
-                request.getPhoneNumber() == null ||
                 request.getEmail() == null ||
                 request.getPassword() == null;
     }

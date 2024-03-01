@@ -47,7 +47,7 @@ class AuthServiceImplTest {
 
     @Test
     void testRegister_Success() {
-        RegisterRequest request = new RegisterRequest("Marcial", "Diaz", "978020189", "mdiaz@gmail.com", "password");
+        RegisterRequest request = new RegisterRequest("Marcial", "Diaz", "mdiaz@gmail.com", "password");
 
         when(userRepository.findUserByEmail(request.getEmail())).thenReturn(Optional.empty());
 
@@ -63,7 +63,6 @@ class AuthServiceImplTest {
         verify(userRepository, times(1)).save(argThat(user ->
                 user.getFirstName().equals("Marcial") &&
                         user.getLastName().equals("Diaz") &&
-                        user.getPhoneNumber().equals("978020189") &&
                         user.getEmail().equals("mdiaz@gmail.com") &&
                         user.getPassword().equals("hashedPassword") &&
                         user.getRole() == Role.USER
@@ -72,7 +71,7 @@ class AuthServiceImplTest {
 
     @Test
     void testRegister_EmailAlreadyExistsException() {
-        RegisterRequest request = new RegisterRequest("Marcial", "Diaz", "978020189", "mdiaz@gmail.com", "password");
+        RegisterRequest request = new RegisterRequest("Marcial", "Diaz", "mdiaz@gmail.com", "password");
 
         when(userRepository.findUserByEmail(request.getEmail())).thenReturn(Optional.of(new User()));
 
@@ -92,7 +91,7 @@ class AuthServiceImplTest {
     @Test
     public void testAuthenticateUserExists() {
         AuthenticationRequest request = new AuthenticationRequest("mdiaz@gmail.com", "contrasena");
-        User user = new User(1L, "Marcial", "Diaz", "978030199", "mdiaz@gmail.com", "hashedPassword", Role.USER);
+        User user = new User(1L, "Marcial", "Diaz", "mdiaz@gmail.com", "hashedPassword", Role.USER);
 
         when(userRepository.findUserByEmail(request.getEmail())).thenReturn(Optional.of(user));
 
@@ -125,7 +124,7 @@ class AuthServiceImplTest {
     @Test
     void testAuthenticate_Success() {
         AuthenticationRequest request = new AuthenticationRequest("mdiaz@gmail.com", "password");
-        User user = new User(1L, "Marcial", "Diaz", "978030199", "mdiaz@gmail.com", "hashedPassword", Role.USER);
+        User user = new User(1L, "Marcial", "Diaz", "mdiaz@gmail.com", "hashedPassword", Role.USER);
 
         when(userRepository.findUserByEmail(request.getEmail())).thenReturn(Optional.of(user));
 

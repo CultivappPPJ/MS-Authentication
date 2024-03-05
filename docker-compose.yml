@@ -6,7 +6,7 @@ services:
     restart: always
     environment:
       MARIADB_ROOT_PASSWORD: sebaroot
-      MARIADB_DATABASE: users
+      MARIADB_DATABASE: cultivapp
       MARIADB_USER: root
       MARIADB_PASSWORD: sebaroot
     ports:

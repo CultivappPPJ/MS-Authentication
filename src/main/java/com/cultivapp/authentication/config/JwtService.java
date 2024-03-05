@@ -1,10 +1,12 @@
 package com.cultivapp.authentication.config;
 
+import com.cultivapp.authentication.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,16 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    //TODO: Pasar a variable de entorno
-    private static final String SECRET_KEY ="dad6d5e1415185e725d60db88a967a3dff04fcdf88d9740be6ebf18ccc228501";
+    @Value("${jwt.secret}")
+    private String secretKey;
 
     public String generateToken(UserDetails userDetails){
-        return generateToken(new HashMap<>(), userDetails);
+        Map<String, Object> extraClaims = new HashMap<>();
+        if (userDetails instanceof User user) {
+            extraClaims.put("firstName", user.getFirstName());
+            extraClaims.put("lastName", user.getLastName());
+        }
+        return generateToken(extraClaims, userDetails);
     }
 
     public String generateToken(Map<String,Object> extraClaims, UserDetails userDetails){
@@ -51,7 +58,7 @@ public class JwtService {
     }
 
     private Key getSignInKey(){
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

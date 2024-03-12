@@ -1,11 +1,10 @@
 package com.cultivapp.authentication.controllers;
 
-import com.cultivapp.authentication.dto.AuthResponse;
-import com.cultivapp.authentication.dto.AuthenticationRequest;
-import com.cultivapp.authentication.dto.RegisterRequest;
+import com.cultivapp.authentication.dto.*;
 import com.cultivapp.authentication.exceptions.EmailAlreadyExistsException;
 import com.cultivapp.authentication.exceptions.EmailNotFoundException;
 import com.cultivapp.authentication.service.AuthService;
+import com.cultivapp.authentication.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final AuthService authService;
+    private final UserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
@@ -57,6 +57,17 @@ public class UserController {
                     AuthResponse.builder()
                             .error("Credenciales incorrectas.")
                             .build());
+        }
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<DeleteResponse> deleteUser(@RequestBody DeleteRequest request) {
+        try {
+            DeleteResponse response = userService.deleteUser(request);
+            log.info("Delete response OK{}", response);
+            return ResponseEntity.ok(response);
+        } catch (EmailNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(DeleteResponse.builder().error(e.getMessage()).build());
         }
     }
 

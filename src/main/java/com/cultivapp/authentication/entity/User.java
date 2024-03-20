@@ -38,6 +38,7 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.ORDINAL)
     private Role role;
+    private Boolean enabled;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

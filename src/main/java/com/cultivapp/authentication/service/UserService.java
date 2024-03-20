@@ -18,14 +18,14 @@ import java.util.Optional;
 public class UserService{
 
     private final UserRepository userRepository;
+
     @Transactional
     public DeleteResponse deleteUser(DeleteRequest request) {
-        Optional<User> existUser = userRepository.findUserByEmail(request.getEmail());
-        if (!existUser.isPresent()) {
-            throw new EmailAlreadyExistsException("Usuario de email + " + request.getEmail() + " no encontrado");
-        } else {
-            userRepository.deleteByEmail(request.getEmail());
-            return DeleteResponse.builder().build();
-        }
+        Optional<User> existUserOptional = userRepository.findUserByEmail(request.getEmail());
+        User existUser = existUserOptional.orElseThrow(() ->
+                new EmailNotFoundException("Usuario de email " + request.getEmail() + " no encontrado"));
+        existUser.setEnabled(false);
+        userRepository.save(existUser);
+        return DeleteResponse.builder().build();
     }
 }

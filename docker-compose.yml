@@ -1,0 +1,13 @@
+version: '3.1'
+
+services:
+  mariadb:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: sebaroot
+      MARIADB_DATABASE: cultivapp
+      MARIADB_USER: root
+      MARIADB_PASSWORD: sebaroot
+    ports:
+      - "3306:3306"
